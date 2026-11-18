@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="author" content="Ruchi Rani">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ruchi Rani | Database Engineer">
+<meta property="og:description" content="Database Engineer: MySQL, PostgreSQL and MongoDB schema design, query optimization and data migration.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b6f6e'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'%3ERR%3C/text%3E%3C/svg%3E">
+<title>Ruchi Rani | Database Engineer</title>
+<meta name="description" content="Ruchi Rani, Database Engineer: MySQL, PostgreSQL and MongoDB schema design, query optimization and data migration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: a schema sheet. A query-and-result hero, then sections read like tables in one database: estate, case studies, history, skills. */
+  :root {
+    --bg: #f2f5f6;
+    --surface: #ffffff;
+    --ink: #0f1e26;
+    --muted: #4e626c;
+    --line: #d5dee2;
+    --accent: #0b6f6e;
+    --accent-soft: #e0efee;
+    --key: #a8660c;
+    --code-bg: #0f1e26;
+    --code-fg: #d8e6ea;
+    --code-kw: #5fd0c9;
+    --code-str: #f0b65a;
+    --code-dim: #7d939c;
+    --display: "Sora", "Segoe UI", system-ui, sans-serif;
+    --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1418; --surface: #111e24; --ink: #e2ecef; --muted: #93a8b1; --line: #23343c;
+      --accent: #4cc7c0; --accent-soft: #15302f; --key: #e3a64a;
+      --code-bg: #060d10; --code-fg: #d8e6ea; --code-kw: #5fd0c9; --code-str: #f0b65a; --code-dim: #6f858e;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b1418; --surface: #111e24; --ink: #e2ecef; --muted: #93a8b1; --line: #23343c;
+    --accent: #4cc7c0; --accent-soft: #15302f; --key: #e3a64a;
+    --code-bg: #060d10; --code-fg: #d8e6ea; --code-kw: #5fd0c9; --code-str: #f0b65a; --code-dim: #6f858e;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; margin: 0; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; letter-spacing: -0.01em; }
+  h3 { font-size: 1.15rem; font-weight: 600; }
+  p { margin: 0; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  .mono { font-family: var(--mono); }
+  .eyebrow { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  section { padding-block: clamp(48px, 7vw, 80px); border-top: 1px solid var(--line); }
+  .sec-head { display: grid; gap: 8px; margin-bottom: 32px; max-width: 65ch; }
+  .sec-head p { color: var(--muted); }
+
+  /* Top bar */
+  .top { padding-block: 18px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .brand { font-family: var(--mono); font-size: 0.9rem; color: var(--muted); }
+  .brand b { color: var(--ink); font-weight: 500; }
+  .nav { display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.92rem; }
+  .nav a { color: var(--muted); text-decoration: none; }
+  .nav a:hover { color: var(--accent); }
+
+  /* Hero */
+  .hero { padding-block: clamp(32px, 6vw, 64px) clamp(48px, 7vw, 80px); display: grid; gap: 40px; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: center; }
+  .hero-text { display: grid; gap: 20px; min-width: 0; }
+  .hero h1 { font-size: clamp(2.6rem, 6.5vw, 4.4rem); font-weight: 700; letter-spacing: -0.03em; }
+  .hero .role { font-family: var(--display); font-size: clamp(1.1rem, 2.2vw, 1.4rem); color: var(--accent); font-weight: 500; }
+  .hero .lede { color: var(--muted); max-width: 54ch; font-size: 1.05rem; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { font: 500 0.95rem var(--body); padding: 11px 18px; border-radius: 6px; border: 1px solid var(--accent); text-decoration: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary { background: var(--accent); color: var(--bg); }
+  .btn-ghost { background: transparent; color: var(--accent); }
+  .btn:hover { filter: brightness(1.08); }
+
+  .console { background: var(--code-bg); color: var(--code-fg); border-radius: 10px; font-family: var(--mono); font-size: 0.85rem; line-height: 1.7; min-width: 0; overflow: hidden; box-shadow: 0 18px 40px -24px rgba(8, 20, 26, 0.55); }
+  .console-bar { display: flex; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); color: var(--code-dim); font-size: 0.75rem; }
+  .console pre { margin: 0; padding: 16px; overflow-x: auto; white-space: pre; }
+  .kw { color: var(--code-kw); }
+  .str { color: var(--code-str); }
+  .dim { color: var(--code-dim); }
+  .result { overflow-x: auto; padding: 0 16px 16px; }
+  .result table { border-collapse: collapse; width: 100%; font-size: 0.8rem; }
+  .result th, .result td { text-align: left; padding: 6px 10px; border: 1px solid rgba(255,255,255,0.12); white-space: nowrap; }
+  .result th { color: var(--code-dim); font-weight: 500; }
+  .result td.num { color: var(--code-str); font-variant-numeric: tabular-nums; }
+  .rows { padding: 0 16px 14px; color: var(--code-dim); font-size: 0.75rem; }
+
+  /* Metrics */
+  .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 10px; background: var(--surface); overflow: hidden; }
+  .metric { padding: 22px 24px; display: grid; gap: 4px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .metric:nth-child(3n) { border-right: 0; }
+  .metric:nth-last-child(-n+3) { border-bottom: 0; }
+  .metric .val { font-family: var(--display); font-size: clamp(1.8rem, 3.6vw, 2.4rem); font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .metric .lbl { color: var(--muted); font-size: 0.92rem; }
+
+  /* Estate */
+  .estate { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .db { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .db-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .db-name { font-family: var(--mono); font-weight: 500; font-size: 1rem; }
+  .db-engine { font-family: var(--mono); font-size: 0.72rem; color: var(--key); border: 1px solid currentColor; padding: 1px 7px; border-radius: 999px; white-space: nowrap; }
+  .db p { color: var(--muted); font-size: 0.93rem; }
+  .estate-note { margin-top: 16px; color: var(--muted); font-size: 0.88rem; }
+
+  /* Case studies */
+  .cases { display: grid; gap: 20px; }
+  .case { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); overflow: hidden; }
+  .case-body { padding: 28px; display: grid; gap: 16px; align-content: start; min-width: 0; }
+  .case-body .tag { font-family: var(--mono); font-size: 0.75rem; color: var(--key); letter-spacing: 0.04em; }
+  .case dl { margin: 0; display: grid; gap: 12px; }
+  .case dt { font-family: var(--mono); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .case dd { margin: 2px 0 0; }
+  .case-visual { background: var(--code-bg); color: var(--code-fg); font-family: var(--mono); font-size: 0.82rem; min-width: 0; display: grid; align-content: center; }
+  .case-visual pre { margin: 0; padding: 24px; overflow-x: auto; white-space: pre; line-height: 1.7; }
+  .case-visual .cap { padding: 0 24px 20px; color: var(--code-dim); font-size: 0.72rem; }
+  .bars { padding: 24px; display: grid; gap: 14px; }
+  .bar-row { display: grid; gap: 6px; }
+  .bar-row span { font-size: 0.78rem; color: var(--code-dim); display: flex; justify-content: space-between; }
+  .bar { height: 14px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--code-str); }
+  .bar i.after { background: var(--code-kw); }
+
+  /* Timeline */
+  .timeline { display: grid; gap: 0; border-left: 2px solid var(--line); margin-left: 6px; }
+  .job { position: relative; padding: 0 0 32px 28px; display: grid; gap: 8px; }
+  .job:last-child { padding-bottom: 0; }
+  .job::before { content: ""; position: absolute; left: -8px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+  .job.current::before { background: var(--accent); }
+  .job-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+  .job .when { font-family: var(--mono); font-size: 0.82rem; color: var(--muted); }
+  .job .org { color: var(--muted); font-size: 0.95rem; }
+  .job ul { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 4px; max-width: 75ch; }
+
+  /* Skills */
+  .skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .skill-group { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 12px; align-content: start; }
+  .skill-group h3 { font-size: 1rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-family: var(--mono); font-size: 0.8rem; padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--ink); }
+
+  /* Education */
+  .edu { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+  .edu-list { display: grid; gap: 16px; }
+  .edu-item { display: grid; gap: 2px; }
+  .edu-item .when { font-family: var(--mono); font-size: 0.82rem; color: var(--muted); }
+  .certs { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+  .certs span { color: var(--muted); }
+
+  /* Contact */
+  .contact { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .contact-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 20px; }
+  .contact-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .contact-row:last-child { border-bottom: 0; }
+  .contact-row .k { font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .contact-row .v { font-family: var(--mono); font-size: 0.95rem; user-select: all; word-break: break-all; }
+  .copy { font: 500 0.8rem var(--body); background: transparent; color: var(--accent); border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px; cursor: pointer; }
+  footer { padding-block: 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; font-family: var(--mono); }
+
+  @media (max-width: 860px) {
+    .hero, .case, .edu, .contact { grid-template-columns: minmax(0, 1fr); }
+    .estate { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .metric:nth-child(3n) { border-right: 1px solid var(--line); }
+    .metric:nth-child(2n) { border-right: 0; }
+    .metric:nth-last-child(-n+3) { border-bottom: 1px solid var(--line); }
+    .metric:nth-last-child(-n+2) { border-bottom: 0; }
+  }
+  @media (max-width: 560px) {
+    .estate, .skills { grid-template-columns: minmax(0, 1fr); }
+    .nav { display: none; }
+    .case-body { padding: 22px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .btn, .nav a { transition: color .15s, filter .15s; }
+  }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><b>ruchi_rani</b>.portfolio</div>
+    <nav class="nav" aria-label="Sections">
+      <a href="#work">Case studies</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="hero-text">
+      <div class="eyebrow">Database Engineer · Chandigarh, India</div>
+      <h1>Ruchi Rani</h1>
+      <div class="role">I design, tune and run production databases.</div>
+      <p class="lede">Database Engineer at BJS Home Delivery. I own the MySQL schemas behind the company's Delivery and Trailer Management Systems, look after 6 production databases across relational and non-relational stores, and help a 10-member backend team write faster, safer SQL.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#contact">Get in touch</a>
+        <a class="btn btn-ghost" href="#work">See case studies</a>
+      </div>
+    </div>
+
+    <div class="console" aria-label="Profile shown as a SQL query and its result">
+      <div class="console-bar"><span>mysql&gt; profile</span><span>prod · read-only</span></div>
+<pre><span class="kw">SELECT</span> role, years, databases, tables,
+       query_speedup, records_migrated
+<span class="kw">FROM</span>   engineers
+<span class="kw">WHERE</span>  name = <span class="str">'Ruchi Rani'</span>;</pre>
+      <div class="result">
+        <table>
+          <thead><tr><th>role</th><th>years</th><th>databases</th><th>tables</th><th>query_speedup</th><th>records_migrated</th></tr></thead>
+          <tbody><tr><td>Database Engineer</td><td class="num">3+</td><td class="num">6</td><td class="num">~50</td><td class="num">~70%</td><td class="num">500K+</td></tr></tbody>
+        </table>
+      </div>
+      <div class="rows">1 row in set (0.00 sec)</div>
+    </div>
+  </div>
+
+  <div class="metrics" role="list" aria-label="Key numbers">
+    <div class="metric" role="listitem"><span class="val">6</span><span class="lbl">production databases managed</span></div>
+    <div class="metric" role="listitem"><span class="val">~50</span><span class="lbl">normalized tables across DMS and TMS</span></div>
+    <div class="metric" role="listitem"><span class="val">~70%</span><span class="lbl">faster query response after tuning</span></div>
+    <div class="metric" role="listitem"><span class="val">500K+</span><span class="lbl">records migrated with Python</span></div>
+    <div class="metric" role="listitem"><span class="val">15+</span><span class="lbl">stored procedures and triggers</span></div>
+    <div class="metric" role="listitem"><span class="val">10</span><span class="lbl">backend developers supported</span></div>
+  </div>
+
+  <section id="estate" style="margin-top: clamp(48px, 7vw, 80px);">
+    <div class="sec-head">
+      <div class="eyebrow">The estate</div>
+      <h2>Six databases I look after</h2>
+      <p>Each one serves a different part of the delivery business, from sign-in to the driver's phone.</p>
+    </div>
+    <div class="estate">
+      <div class="db"><div class="db-head"><span class="db-name">DMS</span><span class="db-engine">MySQL</span></div><p>Delivery Management System. Order tracking, delivery scheduling and reporting. Schema designed and optimized by me.</p></div>
+      <div class="db"><div class="db-head"><span class="db-name">TMS</span><span class="db-engine">MySQL</span></div><p>Trailer Management System. Trailer tracking, allocation and movement. Data model built from scratch by me.</p></div>
+      <div class="db"><div class="db-head"><span class="db-name">SSO</span><span class="db-engine">PostgreSQL</span></div><p>Single sign-on. The identity database behind user login across company applications.</p></div>
+      <div class="db"><div class="db-head"><span class="db-name">ePOD</span><span class="db-engine">Mobile</span></div><p>Electronic proof of delivery, fed by drivers' mobile devices out on the road.</p></div>
+      <div class="db"><div class="db-head"><span class="db-name">Routing</span><span class="db-engine">Ops</span></div><p>Route planning data that drives how deliveries are sequenced each day.</p></div>
+      <div class="db"><div class="db-head"><span class="db-name">GSIT</span><span class="db-engine">Ops</span></div><p>Operational database maintained alongside the core delivery systems.</p></div>
+    </div>
+    <p class="estate-note">I design both relational (MySQL, PostgreSQL) and non-relational (MongoDB) models, picking the one that fits each application's access patterns.</p>
+  </section>
+
+  <section id="work">
+    <div class="sec-head">
+      <div class="eyebrow">Case studies</div>
+      <h2>Selected work</h2>
+      <p>Four pieces of work from my current role. The code panels show the patterns I use; they are simplified examples, not production code.</p>
+    </div>
+    <div class="cases">
+
+      <article class="case">
+        <div class="case-body">
+          <span class="tag">PROJECT · MYSQL</span>
+          <h3>Delivery Management System schema</h3>
+          <dl>
+            <div><dt>Challenge</dt><dd>Order tracking, delivery scheduling and reporting all needed one reliable source of truth.</dd></div>
+            <div><dt>What I did</dt><dd>Designed and optimized the MySQL schema: table structure, relationships and constraints, plus stored procedures and triggers for business rules, data validation and audit trails.</dd></div>
+            <div><dt>Result</dt><dd>A normalized schema that backs live operations and reporting, part of ~50 tables across DMS and TMS with full referential integrity.</dd></div>
+          </dl>
+        </div>
+        <div class="case-visual">
+<pre><span class="dim">-- example pattern: audit trail trigger</span>
+<span class="kw">CREATE TRIGGER</span> trg_order_status_audit
+<span class="kw">AFTER UPDATE ON</span> orders
+<span class="kw">FOR EACH ROW</span>
+  <span class="kw">INSERT INTO</span> order_status_log
+    (order_id, old_status, new_status, changed_at)
+  <span class="kw">VALUES</span>
+    (NEW.id, OLD.status, NEW.status, NOW());</pre>
+          <div class="cap">Simplified example of the trigger pattern</div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-body">
+          <span class="tag">PROJECT · MYSQL</span>
+          <h3>Trailer Management System data model</h3>
+          <dl>
+            <div><dt>Challenge</dt><dd>A new system to track trailers, their allocation and their movement, with no existing data model.</dd></div>
+            <div><dt>What I did</dt><dd>Built the MySQL model from scratch with normalized tables, primary and foreign keys, and constraints that stop bad data at the door.</dd></div>
+            <div><dt>Result</dt><dd>Clean, consistent trailer data that the backend team builds on directly.</dd></div>
+          </dl>
+        </div>
+        <div class="case-visual">
+<pre><span class="dim">-- example pattern: enforcing relationships</span>
+<span class="kw">CREATE TABLE</span> trailer_allocations (
+  id          <span class="kw">BIGINT PRIMARY KEY AUTO_INCREMENT</span>,
+  trailer_id  <span class="kw">BIGINT NOT NULL</span>,
+  depot_id    <span class="kw">INT NOT NULL</span>,
+  allocated_at <span class="kw">DATETIME NOT NULL</span>,
+  <span class="kw">FOREIGN KEY</span> (trailer_id) <span class="kw">REFERENCES</span> trailers(id),
+  <span class="kw">FOREIGN KEY</span> (depot_id)   <span class="kw">REFERENCES</span> depots(id)
+);</pre>
+          <div class="cap">Simplified example of the modelling approach</div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-body">
+          <span class="tag">PERFORMANCE · QUERY TUNING</span>
+          <h3>Cutting query response time by ~70%</h3>
+          <dl>
+            <div><dt>Challenge</dt><dd>Slow queries were holding up applications and reports.</dd></div>
+            <div><dt>What I did</dt><dd>Read execution plans with EXPLAIN, rewrote heavy joins and subqueries, and added composite and covering indexes where full-table scans were happening.</dd></div>
+            <div><dt>Result</dt><dd>Query response time down by about 70% on the tuned queries.</dd></div>
+          </dl>
+        </div>
+        <div class="case-visual">
+          <div class="bars" aria-label="Relative query response time before and after tuning">
+            <div class="bar-row"><span><b>Before tuning</b><em>100%</em></span><div class="bar"><i style="width:100%"></i></div></div>
+            <div class="bar-row"><span><b>After tuning</b><em>~30%</em></span><div class="bar"><i class="after" style="width:30%"></i></div></div>
+          </div>
+<pre><span class="dim">-- example pattern: composite index for a hot filter</span>
+<span class="kw">CREATE INDEX</span> idx_orders_status_date
+  <span class="kw">ON</span> orders (status, delivery_date);</pre>
+          <div class="cap">Relative response time; simplified index example</div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-body">
+          <span class="tag">MIGRATION · PYTHON</span>
+          <h3>Moving 500K+ records between clusters</h3>
+          <dl>
+            <div><dt>Challenge</dt><dd>Data had to move between databases in the same cluster and across different clusters without loss.</dd></div>
+            <div><dt>What I did</dt><dd>Wrote Python migration scripts that copy data in batches, then validate and reconcile row counts and values on both sides.</dd></div>
+            <div><dt>Result</dt><dd>More than 500,000 records migrated, with checks confirming the data matched.</dd></div>
+          </dl>
+        </div>
+        <div class="case-visual">
+<pre><span class="dim"># example pattern: batch copy + reconcile</span>
+<span class="kw">for</span> batch <span class="kw">in</span> read_in_batches(src, size=<span class="str">5000</span>):
+    write_batch(dst, batch)
+
+<span class="kw">assert</span> count(src) == count(dst), <span class="str">"row mismatch"</span>
+<span class="kw">assert</span> checksum(src) == checksum(dst)</pre>
+          <div class="cap">Simplified example of the migration approach</div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="sec-head">
+      <div class="eyebrow">Experience</div>
+      <h2>Where I've worked</h2>
+    </div>
+    <div class="timeline">
+      <div class="job current">
+        <div class="job-head"><h3>Database Engineer</h3><span class="when">Jan 2025 – Present</span></div>
+        <div class="org">BJS Home Delivery · Chandigarh, India</div>
+        <ul>
+          <li>Designed the MySQL schemas for the Delivery Management System and Trailer Management System (~50 normalized tables).</li>
+          <li>Manage and monitor 6 production databases: PostgreSQL (SSO), Routing, ePOD, GSIT, DMS and TMS.</li>
+          <li>Cut query response time by ~70% with execution-plan analysis, query rewrites and targeted indexes.</li>
+          <li>Write and maintain 15+ stored procedures and triggers for business logic, validation and audit trails.</li>
+          <li>Automated migration of 500K+ records within and across clusters using Python.</li>
+          <li>Mentor a 10-member backend team on table structure, query writing and best practices.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <div class="job-head"><h3>Data Analyst</h3><span class="when">Sep 2023 – Dec 2024</span></div>
+        <div class="org">BJS Home Delivery · Chandigarh, India</div>
+        <ul>
+          <li>Launched 10+ Looker Studio dashboards to track operational KPIs.</li>
+          <li>Developed 6+ Power BI dashboards for team leads to monitor team performance.</li>
+          <li>Prepared weekly performance reports and monthly incentive reports for leadership.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <div class="job-head"><h3>Business Analytics Intern</h3><span class="when">Jun 2022 – Aug 2022</span></div>
+        <div class="org">Spray Engineering Devices Ltd. · Mohali, India</div>
+        <ul>
+          <li>Ran cost analysis for 25+ engineering projects and built dashboards for steel purchasing, scrap and salvage tracking.</li>
+          <li>Operated Epicor ERP across Business Development, Engineering and Costing for 10 teams.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <div class="job-head"><h3>Data Analytics Virtual Experience</h3><span class="when">Virtual</span></div>
+        <div class="org">Accenture · Remote</div>
+        <ul>
+          <li>Cleaned and modeled 7 Excel datasets for the Social Buzz project and found the top 5 content categories.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="sec-head">
+      <div class="eyebrow">Skills</div>
+      <h2>Toolkit</h2>
+    </div>
+    <div class="skills">
+      <div class="skill-group"><h3>Databases</h3><div class="chips"><span class="chip">MySQL</span><span class="chip">PostgreSQL</span><span class="chip">MongoDB</span><span class="chip">RDBMS</span><span class="chip">NoSQL</span></div></div>
+      <div class="skill-group"><h3>Database engineering</h3><div class="chips"><span class="chip">Schema design</span><span class="chip">Data modeling</span><span class="chip">Normalization</span><span class="chip">Stored procedures</span><span class="chip">Triggers</span><span class="chip">Indexing</span><span class="chip">Foreign keys</span><span class="chip">Query optimization</span><span class="chip">EXPLAIN plans</span><span class="chip">Data migration</span></div></div>
+      <div class="skill-group"><h3>Languages and tools</h3><div class="chips"><span class="chip">SQL</span><span class="chip">Python</span><span class="chip">DataGrip</span><span class="chip">Git</span><span class="chip">Advanced Excel</span><span class="chip">Google Sheets</span></div></div>
+      <div class="skill-group"><h3>BI and analytics</h3><div class="chips"><span class="chip">Power BI</span><span class="chip">Looker Studio</span><span class="chip">Tableau</span><span class="chip">Data cleaning</span><span class="chip">Reporting automation</span></div></div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="edu">
+      <div>
+        <div class="sec-head"><div class="eyebrow">Education</div><h2>Study</h2></div>
+        <div class="edu-list">
+          <div class="edu-item"><h3>MBA, Business Analytics</h3><span>Akal University · CGPA 8.9 / 10</span><span class="when">Jul 2021 – Jun 2023</span></div>
+          <div class="edu-item"><h3>B.Sc. Mathematics (Hons)</h3><span>Akal University</span><span class="when">Jul 2018 – Jun 2021</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-head"><div class="eyebrow">Certifications</div><h2>Courses</h2></div>
+        <ul class="certs">
+          <li>Google Data Analytics Professional <span>· Coursera</span></li>
+          <li>Google Digital Marketing &amp; E-Commerce <span>· Coursera</span></li>
+          <li>Tableau &amp; Power BI Training <span>· Simplilearn</span></li>
+          <li>Python &amp; C Programming <span>· IIT Bombay</span></li>
+          <li>Data Analytics with R <span>· IIT Kanpur</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact">
+      <div class="sec-head">
+        <div class="eyebrow">Contact</div>
+        <h2>Hiring a Database Engineer?</h2>
+        <p>I'm open to Database Engineer, MySQL/PostgreSQL Developer and DBA roles in Chandigarh, Bangalore, Pune, Hyderabad, Delhi NCR or remote. Email is the fastest way to reach me.</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-row"><div><div class="k">Email</div><div class="v" id="email">ruchirani9669@gmail.com</div></div><button class="copy" type="button" data-copy="email">Copy</button></div>
+        <div class="contact-row"><div><div class="k">Phone</div><div class="v" id="phone">+91 9050309669</div></div><button class="copy" type="button" data-copy="phone">Copy</button></div>
+        <div class="contact-row"><div><div class="k">LinkedIn</div><a class="v" href="https://www.linkedin.com/in/ruchi-mehta-51524b227" target="_blank" rel="noopener">linkedin.com/in/ruchi-mehta-51524b227</a></div></div>
+        <div class="contact-row"><div><div class="k">Based in</div><div class="v">Sirsa / Chandigarh, India</div></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">ruchi_rani · Database Engineer · MySQL · PostgreSQL · MongoDB</div>
+</footer>
+
+<script>
+  document.querySelectorAll('.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var el = document.getElementById(btn.dataset.copy);
+      var text = el.textContent.trim();
+      function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); }
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(el);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        btn.textContent = 'Selected';
+        setTimeout(function () { btn.textContent = 'Copy'; }, 1600);
+      }
+      try {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } catch (e) { fallback(); }
+    });
+  });
+</script>
+</body>
+</html>
